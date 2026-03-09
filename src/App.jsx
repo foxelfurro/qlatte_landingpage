@@ -161,27 +161,6 @@ export default function App() {
             </div>
           </div>
         </section>
-
-        <section className="mt-60 py-32 bg-slate-900 dark:bg-black rounded-[3rem] text-center px-6 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <div className="absolute top-10 left-10 size-40 border border-white rounded-full" />
-            <div className="absolute bottom-20 right-20 size-80 border border-primary rounded-full" />
-          </div>
-          <div className="relative z-10 max-w-3xl mx-auto">
-            <h2 className="text-5xl md:text-8xl font-extrabold text-white tracking-tighter mb-12 leading-none">
-              ¿Listo para el <span className="text-primary italic">flow?</span>
-            </h2>
-            <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-              <button className="w-full md:w-auto bg-primary text-slate-900 px-12 py-5 rounded-full font-extrabold text-lg hover:bg-white transition-colors">
-                Demo gratuita
-              </button>
-              <button className="w-full md:w-auto border border-white/20 text-white px-12 py-5 rounded-full font-bold text-lg hover:bg-white/10 transition-colors">
-                Contactar ventas
-              </button>
-            </div>
-            <p className="text-white/40 mt-12 text-sm uppercase tracking-widest font-bold">No requiere tarjeta de crédito</p>
-          </div>
-        </section>
       </main>
 
       <footer className="px-6 md:px-12 py-24 border-t border-primary/10">
@@ -220,7 +199,7 @@ export default function App() {
           </div>
         </div>
         <div className="mt-24 flex flex-col md:flex-row justify-between items-center gap-8 opacity-40 text-xs font-bold uppercase tracking-tighter">
-          <p>© 2024 QLATTE SOFTWARE S.A. DE C.V.</p>
+          <p>© 2026 QLATTE SOFTWARE S.A.S</p>
           <div className="flex gap-8">
             <a href="#">Privacidad</a>
             <a href="#">Términos</a>
