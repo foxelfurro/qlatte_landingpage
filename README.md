@@ -1,6 +1,6 @@
 # qlatte_landingpage
 
-Entorno base para construir una landing page en **React + Vite**.
+Landing page en React + Vite con diseño visual basado en Tailwind CSS vía CDN.
 
 ## Requisitos
 
@@ -23,8 +23,7 @@ Abre `http://localhost:5173`.
 - `npm run preview`: sirve la build localmente.
 - `npm run lint`: ejecuta ESLint.
 
-## Estructura inicial
+## Notas de UI
 
-- `src/App.jsx`: layout base de la landing.
-- `src/styles.css`: estilos iniciales.
-- `vite.config.js`: configuración de Vite.
+- Tailwind se carga por CDN en `index.html`.
+- La landing principal está en `src/App.jsx`.
