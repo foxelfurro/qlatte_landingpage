@@ -3,16 +3,98 @@ body {
   font-family: 'Manrope', sans-serif;
 }
 
-.vertical-text {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
+.orb {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.35;
+  pointer-events: none;
 }
 
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
+.orb-one {
+  width: 16rem;
+  height: 16rem;
+  background: #c6c639;
+  top: -4rem;
+  left: -2rem;
+  animation: drift 9s ease-in-out infinite;
 }
 
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+.orb-two {
+  width: 18rem;
+  height: 18rem;
+  background: #d7d77d;
+  bottom: -6rem;
+  right: -3rem;
+  animation: drift 11s ease-in-out infinite reverse;
+}
+
+.hero-showcase {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(198, 198, 57, 0.35);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 225, 0.92));
+  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.16);
+}
+
+.hero-ring {
+  position: absolute;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 9999px;
+  border: 28px solid rgba(198, 198, 57, 0.16);
+  top: -7rem;
+  right: -7rem;
+  animation: spinRing 14s linear infinite;
+}
+
+.pulse-dot {
+  animation: pulseDot 1.8s ease-in-out infinite;
+}
+
+.reveal-up {
+  opacity: 0;
+  animation: revealUp 700ms ease forwards;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(18px, -20px, 0);
+  }
+}
+
+@keyframes spinRing {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulseDot {
+  0%,
+  100% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+}
+
+@keyframes revealUp {
+  from {
+    transform: translateY(16px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
