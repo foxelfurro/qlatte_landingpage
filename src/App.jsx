@@ -1,210 +1,448 @@
+import React, { useState } from 'react'
+
+const menuItems = [
+  { label: 'Soluciones', href: '#soluciones' },
+  { label: 'Beneficios', href: '#beneficios' },
+  { label: 'Ideas', href: '#ideas' },
+  { label: 'Contacto', href: '#contacto' },
+]
+
 export default function App() {
+  // --- LÓGICA DEL BACKEND ---
+  const [status, setStatus] = useState('idle') // idle, sending, success, error
+  const [formData, setFormData] = useState({
+    nombre: '',
+    email: '',
+    negocio: '',
+    reto: ''
+  })
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value })
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    setStatus('sending')
+
+    try {
+      const response = await fetch('http://localhost:3001/api/enviar-idea', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setStatus('success')
+        setFormData({ nombre: '', email: '', negocio: '', reto: '' })
+        // Volver al estado inicial después de 5 segundos
+        setTimeout(() => setStatus('idle'), 5000)
+      } else {
+        setStatus('error')
+      }
+    } catch (error) {
+      console.error("Error:", error)
+      setStatus('error')
+    }
+  }
+
   return (
-    <div className="bg-background-light text-slate-900 antialiased overflow-x-hidden dark:bg-background-dark dark:text-slate-100 font-display">
-      <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 md:px-12 flex justify-between items-end pointer-events-none">
-        <div className="pointer-events-auto">
-          <div className="flex items-center gap-2 group cursor-pointer">
-            <div className="size-8 bg-primary rounded-full flex items-center justify-center">
-              <span className="material-symbols-outlined text-background-light text-lg">coffee</span>
-            </div>
-            <h2 className="text-2xl font-extrabold tracking-tighter">QLatte</h2>
-          </div>
-        </div>
-        <div className="hidden md:flex flex-col gap-4 items-end pointer-events-auto">
-          <div className="flex gap-8 text-xs font-bold uppercase tracking-widest opacity-60 hover:opacity-100 transition-opacity">
-            <a className="hover:text-primary transition-colors" href="#">Sistema</a>
-            <a className="hover:text-primary transition-colors" href="#">Filosofía</a>
-            <a className="hover:text-primary transition-colors" href="#">Precios</a>
-          </div>
-          <button className="bg-primary text-slate-900 px-8 py-3 rounded-full font-bold text-sm transition-transform active:scale-95">
-            Empezar flujo
-          </button>
-        </div>
-      </nav>
+    <div className="min-h-screen bg-background-light text-slate-900 antialiased overflow-x-hidden dark:bg-background-dark dark:text-slate-100 font-display scroll-smooth">
+      <header className="sticky top-0 z-50 backdrop-blur bg-background-light/80 dark:bg-background-dark/80 border-b border-primary/15">
+        <nav className="max-w-7xl mx-auto px-6 md:px-12 h-20 flex items-center justify-between">
+          <a href="#inicio" className="flex items-center gap-2">
+            <span className="size-8 bg-primary rounded-full flex items-center justify-center">
+              <span className="material-symbols-outlined text-background-dark text-lg">coffee</span>
+            </span>
+            <span className="text-2xl font-extrabold tracking-tight">QLatte</span>
+          </a>
 
-      <main className="relative pt-32 pb-24 px-6 md:px-12">
-        <section className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-          <div className="md:col-span-8 flex flex-col gap-12">
-            <div className="relative">
-              <h1 className="text-7xl md:text-[10rem] font-extrabold leading-[0.85] tracking-tighter text-slate-900 dark:text-slate-100">
-                Software <br /> que <br /> <span className="text-primary italic">fluye.</span>
-              </h1>
-              <div className="absolute -top-4 -right-4 md:right-20 opacity-20">
-                <span className="material-symbols-outlined text-9xl">water_drop</span>
-              </div>
-            </div>
-            <p className="max-w-md text-xl md:text-2xl font-light leading-relaxed text-slate-600 dark:text-slate-400">
-              Eliminamos la fricción operativa. Una plataforma diseñada para la PyME mexicana que busca orden sin complejidad.
+          <div className="hidden md:flex items-center gap-7 text-xs uppercase tracking-[0.2em] font-bold">
+            {menuItems.map((item) => (
+              <a key={item.label} href={item.href} className="hover:text-primary transition-colors">
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          <a
+            href="#ideas"
+            className="bg-primary text-slate-900 px-5 py-2.5 rounded-full text-sm font-extrabold hover:brightness-95 transition"
+          >
+            Empezar
+          </a>
+        </nav>
+      </header>
+
+      <main>
+        {/* HERO SECTION */}
+        <section id="inicio" className="max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-24 grid md:grid-cols-12 gap-10 items-center">
+          <div className="md:col-span-7 space-y-8">
+            <p className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full bg-primary/20 text-slate-700 dark:text-slate-200">
+              Software para PyMes
             </p>
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[0.92]">
+              Software que convierte
+              <br /> el caos en <span className="text-primary italic">flujo.</span>
+            </h1>
+            <p className="text-lg md:text-xl text-slate-600 dark:text-slate-400 max-w-2xl">
+              Unificamos punto de venta, nómina y CRM en una experiencia clara para que tu equipo opere mejor.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <a href="#ideas" className="px-7 py-3.5 rounded-full bg-primary text-slate-900 font-extrabold">
+                Solicitar demo
+              </a>
+              <a href="#soluciones" className="px-7 py-3.5 rounded-full border border-primary/30 font-bold hover:bg-primary/10 transition">
+                Ver soluciones
+              </a>
+            </div>
           </div>
-          <div className="md:col-span-4 sticky top-32 flex flex-col gap-4 border-l border-primary/20 pl-8 py-4">
-            <div className="group cursor-pointer py-6 border-b border-primary/10">
-              <span className="text-xs font-bold text-primary mb-2 block uppercase tracking-widest">01</span>
-              <h3 className="text-2xl font-bold group-hover:translate-x-2 transition-transform">POS Inteligente</h3>
-              <p className="text-sm opacity-60 mt-2 max-w-xs">Ventas rápidas, inventarios que se actualizan en tiempo real.</p>
+
+          <aside className="md:col-span-5 bg-white dark:bg-slate-900/40 rounded-3xl p-7 md:p-9 border border-primary/20 shadow-xl">
+            <h2 className="text-2xl font-extrabold tracking-tight mb-6">Estado operativo</h2>
+            <div className="space-y-4">
+              {[
+                ['Ventas del día', '+18.4%'],
+                ['Dispersión de nómina', '100%'],
+                ['Seguimientos CRM', '47 activos'],
+              ].map(([label, value]) => (
+                <div key={label} className="flex items-center justify-between rounded-xl border border-primary/15 px-4 py-3">
+                  <span className="text-sm font-semibold opacity-80">{label}</span>
+                  <span className="text-sm font-extrabold text-primary">{value}</span>
+                </div>
+              ))}
             </div>
-            <div className="group cursor-pointer py-6 border-b border-primary/10">
-              <span className="text-xs font-bold text-primary mb-2 block uppercase tracking-widest">02</span>
-              <h3 className="text-2xl font-bold group-hover:translate-x-2 transition-transform">Nómina Digital</h3>
-              <p className="text-sm opacity-60 mt-2 max-w-xs">Cálculos exactos bajo legislación mexicana, sin errores.</p>
-            </div>
-            <div className="group cursor-pointer py-6">
-              <span className="text-xs font-bold text-primary mb-2 block uppercase tracking-widest">03</span>
-              <h3 className="text-2xl font-bold group-hover:translate-x-2 transition-transform">CRM Estratégico</h3>
-              <p className="text-sm opacity-60 mt-2 max-w-xs">Tus clientes no son números, son relaciones de valor.</p>
+          </aside>
+        </section>
+
+        {/* SOLUCIONES */}
+        <section id="soluciones" className="py-20 bg-slate-900 text-white">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4 text-primary">Nuestras Soluciones</h2>
+            <div className="grid md:grid-cols-3 gap-6 mt-12">
+              <article className="rounded-2xl p-7 bg-white/5 border border-white/10">
+                <span className="material-symbols-outlined text-primary text-4xl mb-4">point_of_sale</span>
+                <h3 className="text-2xl font-bold mb-3">POS Inteligente</h3>
+                <p className="text-slate-300">Cobro rápido e inventario sincronizado.</p>
+              </article>
+              <article className="rounded-2xl p-7 bg-primary text-slate-900">
+                <span className="material-symbols-outlined text-4xl mb-4">groups</span>
+                <h3 className="text-2xl font-extrabold mb-3">Nómina Digital</h3>
+                <p className="font-semibold">Timbrado CFDI y dispersión automática.</p>
+              </article>
+              <article className="rounded-2xl p-7 bg-white/5 border border-white/10">
+                <span className="material-symbols-outlined text-primary text-4xl mb-4">insights</span>
+                <h3 className="text-2xl font-bold mb-3">CRM Estratégico</h3>
+                <p className="text-slate-300">Pipeline claro para tu equipo comercial.</p>
+              </article>
             </div>
           </div>
         </section>
 
-        <section className="mt-40 -mx-6 md:-mx-12">
-          <div className="px-6 md:px-12 mb-12 flex justify-between items-end">
-            <h2 className="text-4xl md:text-6xl font-extrabold tracking-tighter max-w-xl">
-              Nuestra visión del <span className="text-primary underline decoration-2 underline-offset-8">orden.</span>
-            </h2>
-            <div className="hidden md:flex items-center gap-4 text-primary">
-              <span className="text-sm font-bold uppercase tracking-widest">Scroll horizontal</span>
-              <span className="material-symbols-outlined">east</span>
-            </div>
+        {/* SECCIÓN: STACK TECNOLÓGICO (ADAPTADO) */}
+        <section id="tech" className="py-24 bg-gradient-to-br from-background-light via-primary/5 to-background-light dark:from-background-dark dark:via-primary/5 dark:to-background-dark relative overflow-hidden">
+          {/* Efectos de Iluminación de Fondo */}
+          <div className="absolute inset-0 opacity-20 pointer-events-none">
+            <div className="absolute top-0 left-0 w-96 h-96 bg-primary rounded-full blur-[120px] animate-pulse"></div>
+            <div className="absolute bottom-0 right-0 w-96 h-96 bg-primary/40 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
           </div>
-          <div className="flex overflow-x-auto hide-scrollbar gap-8 px-6 md:px-12 py-12">
-            <div className="min-w-[300px] md:min-w-[500px] aspect-[4/5] bg-white dark:bg-background-dark border border-primary/20 p-10 flex flex-col justify-between group overflow-hidden relative">
-              <div className="relative z-10">
-                <span className="material-symbols-outlined text-5xl text-primary mb-6">point_of_sale</span>
-                <h4 className="text-3xl font-bold">Punto de Venta</h4>
-              </div>
-              <div className="relative z-10">
-                <p className="text-lg font-light mb-8 opacity-80">Gestión de stock automática y reportes de rentabilidad por producto.</p>
-                <button className="flex items-center gap-2 font-bold group-hover:gap-4 transition-all">
-                  Saber más <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
-              </div>
-              <div className="absolute -bottom-20 -right-20 size-64 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <span className="text-9xl font-black">POS</span>
-              </div>
-            </div>
 
-            <div className="min-w-[300px] md:min-w-[500px] aspect-[4/5] bg-primary text-slate-900 p-10 flex flex-col justify-between group relative overflow-hidden">
-              <div className="relative z-10">
-                <span className="material-symbols-outlined text-5xl mb-6">groups</span>
-                <h4 className="text-3xl font-bold">Nómina CFDI</h4>
+          <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center justify-center size-14 bg-primary/10 rounded-2xl border border-primary/20 mb-6">
+                <span className="material-symbols-outlined text-primary text-3xl">terminal</span>
               </div>
-              <div className="relative z-10">
-                <p className="text-lg font-medium mb-8">Timbrado masivo y dispersión de pagos en un solo clic.</p>
-                <button className="flex items-center gap-2 font-bold border-b-2 border-slate-900 pb-1">Ver funcionamiento</button>
-              </div>
-              <div className="absolute top-0 right-0 p-4 opacity-20">
-                <span className="text-9xl font-black">PAY</span>
-              </div>
-            </div>
-
-            <div className="min-w-[300px] md:min-w-[500px] aspect-[4/5] bg-slate-900 text-white p-10 flex flex-col justify-between group relative overflow-hidden">
-              <div className="relative z-10">
-                <span className="material-symbols-outlined text-5xl text-primary mb-6">insights</span>
-                <h4 className="text-3xl font-bold">CRM 360</h4>
-              </div>
-              <div className="relative z-10">
-                <p className="text-lg font-light mb-8 opacity-80">Anticipa las necesidades de tus clientes con análisis predictivo simple.</p>
-                <button className="flex items-center gap-2 font-bold group-hover:gap-4 transition-all text-primary">
-                  Explorar <span className="material-symbols-outlined">arrow_forward</span>
-                </button>
-              </div>
-              <div className="absolute top-0 right-0 p-4 opacity-10">
-                <span className="text-9xl font-black">CRM</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="mt-40 grid grid-cols-1 md:grid-cols-12 gap-12 items-center">
-          <div className="md:col-span-6 relative order-2 md:order-1">
-            <div className="aspect-square bg-slate-200 dark:bg-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                alt="Modern workspace with coffee and laptop showing clean software"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3OWTUOn-Lo8jUSdeuOXxaV1D1wTRD810lbthow8S2wR6ZBV1seJoRch0cFTcg3aQ0XuJjPVy_I0bFb_1ljQdc3Ju9Agu8WWN8qLFgru9ERMvXZnE8K4B8N4VqeRjwOy51ukbqOmLOKPzKf-DdecTpl9ER4FW3mSrl-Ji2oAEos4LeXu38ydnGQZP7A3OCMa3es8laiuhSFR1c2MAh2hQ37HadeuV9Y8DKb-jjCHGbVZhRYnkgWj6qGx5NYUdu74XMxFKRHdO5gTf1"
-              />
-            </div>
-            <div className="absolute -bottom-10 -right-6 md:-right-12 bg-primary p-8 rounded-2xl shadow-xl max-w-xs">
-              <p className="text-slate-900 font-bold leading-tight italic">
-                "La fluidez no es solo estética, es el motor de la productividad mexicana."
+              <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+                Stack <span className="text-primary">Tecnológico</span>
+              </h2>
+              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+                Dominamos las herramientas más potentes para construir soluciones escalables, 
+                seguras y listas para el mercado global.
               </p>
-              <p className="text-xs font-bold mt-4 uppercase opacity-60">— QLatte Manifesto</p>
+            </div>
+
+            {/* Grid de Tecnologías */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { 
+                  cat: 'Frontend', 
+                  tools: ['React', 'Next.js', 'Tailwind', 'TypeScript'],
+                  icon: 'devices' 
+                },
+                { 
+                  cat: 'Backend', 
+                  tools: ['Node.js', 'Express', 'Python', 'NestJS'],
+                  icon: 'settings_ethernet' 
+                },
+                { 
+                  cat: 'Database', 
+                  tools: ['PostgreSQL', 'MongoDB', 'Redis', 'Supabase'],
+                  icon: 'database' 
+                },
+                { 
+                  cat: 'Infraestructura', 
+                  tools: ['AWS', 'Docker', 'Vercel', 'CI/CD'],
+                  icon: 'cloud_queue' 
+                }
+              ].map((group) => (
+                <div 
+                  key={group.cat} 
+                  className="group p-8 rounded-3xl bg-white dark:bg-slate-900/40 border border-primary/15 hover:border-primary/40 transition-all duration-500 shadow-xl shadow-primary/5"
+                >
+                  <div className="flex items-center gap-4 mb-6">
+                    <span className="material-symbols-outlined text-primary text-3xl group-hover:scale-110 transition-transform">
+                      {group.icon}
+                    </span>
+                    <h3 className="text-xl font-extrabold">{group.cat}</h3>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-2">
+                    {group.tools.map((tool) => (
+                      <span 
+                        key={tool} 
+                        className="px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/10 text-xs font-bold text-slate-700 dark:text-slate-300 group-hover:bg-primary/20 transition-colors"
+                      >
+                        {tool}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
-          <div className="md:col-span-6 md:pl-16 order-1 md:order-2">
-            <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-none">
-              Minimalismo <br /> <span className="text-primary">Estructural.</span>
-            </h2>
-            <p className="text-xl font-light text-slate-600 dark:text-slate-400 mb-12">
-              Nuestra interfaz no grita, te guía. Hemos reducido la carga cognitiva para que tú y tu equipo puedan enfocarse en lo que realmente importa: crecer.
-            </p>
-            <div className="flex flex-col gap-8">
-              <div className="flex items-start gap-4">
-                <div className="size-10 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-primary">bolt</span>
-                </div>
-                <div>
-                  <h5 className="font-bold text-lg">Cero Curva de Aprendizaje</h5>
-                  <p className="text-sm opacity-60">Implementación en menos de 24 horas para todo tu equipo.</p>
+        </section>
+
+        {/* SECCIÓN: DESARROLLO A MEDIDA (ADAPTADA) */}
+        <section className="py-24 bg-background-light dark:bg-background-dark">
+          <div className="max-w-7xl mx-auto px-6 md:px-12">
+            <div className="max-w-4xl mx-auto">
+              {/* Encabezado con tu estilo */}
+              <div className="text-center mb-16 space-y-6">
+                <p className="inline-flex items-center gap-2 px-4 py-1.5 text-xs font-bold uppercase tracking-widest rounded-full bg-primary/20 text-slate-700 dark:text-slate-200">
+                  Expertos en código
+                </p>
+                <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-none">
+                  Desarrollo de Software <br />
+                  <span className="text-primary italic">a la medida.</span>
+                </h2>
+                <div className="space-y-4 max-w-3xl mx-auto">
+                  <p className="text-lg md:text-xl font-bold text-slate-800 dark:text-slate-100">
+                    Somos proveedores especializados en crear soluciones tecnológicas personalizadas.
+                  </p>
+                  <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+                    Desde el análisis de requerimientos hasta el mantenimiento, construimos plataformas 
+                    escalables y seguras. No solo programamos: creamos arquitectura profesional y 
+                    experiencias de usuario excepcionales alineadas a tus objetivos.
+                  </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="size-10 bg-primary/20 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="material-symbols-outlined text-primary">encrypted</span>
-                </div>
-                <div>
-                  <h5 className="font-bold text-lg">Seguridad de Grado Bancario</h5>
-                  <p className="text-sm opacity-60">Tus datos fiscales y financieros siempre protegidos.</p>
-                </div>
+
+              {/* Grid de Servicios con tus iconos de Material Symbols */}
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6 mt-12">
+                {[
+                  { icon: 'language', label: 'Sistemas Web' },
+                  { icon: 'database', label: 'Bases de Datos' },
+                  { icon: 'cloud_done', label: 'Cloud & APIs' },
+                  { icon: 'verified_user', label: 'Seguridad' },
+                  { icon: 'memory', label: 'Integraciones' },
+                ].map((item) => (
+                  <div key={item.label} className="flex flex-col items-center text-center group">
+                    <div className="size-16 md:size-20 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mb-4 group-hover:bg-primary group-hover:text-slate-900 transition-all duration-300 shadow-lg shadow-primary/5">
+                      <span className="material-symbols-outlined text-3xl md:text-4xl">
+                        {item.icon}
+                      </span>
+                    </div>
+                    <h3 className="font-bold text-sm md:text-base opacity-80 group-hover:opacity-100 transition-opacity">
+                      {item.label}
+                    </h3>
+                  </div>
+                ))}
+              </div>
+
+              {/* Botón Call to Action con el estilo de tu Hero */}
+              <div className="text-center mt-20">
+                <a 
+                  href="#ideas" 
+                  className="inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-slate-900 text-white dark:bg-primary dark:text-slate-900 font-extrabold text-lg hover:scale-105 active:scale-95 transition-all shadow-2xl shadow-primary/20 group"
+                >
+                  <span className="material-symbols-outlined animate-pulse">auto_awesome</span>
+                  Solicitar Propuesta
+                  <span className="material-symbols-outlined group-hover:translate-x-2 transition-transform">
+                    arrow_forward
+                  </span>
+                </a>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* SECCIÓN: POR QUÉ ELEGIRNOS (ADAPTADA A QLATTE) */}
+        <section className="py-24 bg-primary/5 relative overflow-hidden border-y border-primary/10">
+          {/* Fondo con Blur Estilo QLatte */}
+          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-primary/5 backdrop-blur-3xl"></div>
+          
+          <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                ¿Por qué elegir <span className="text-primary italic">QLatte</span>?
+              </h2>
+              <p className="text-xl text-slate-600 dark:text-slate-400 max-w-2xl mx-auto font-medium">
+                Somos desarrolladores comprometidos con la excelencia técnica y el crecimiento de tu negocio.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {[
+                { 
+                  title: 'Software a Medida', 
+                  desc: 'Soluciones únicas que se adaptan exactamente a tus procesos, no al revés.',
+                  icon: 'code_blocks'
+                },
+                { 
+                  title: 'Arquitectura Escalable', 
+                  desc: 'Sistemas listos para crecer, desde una startup hasta nivel Enterprise.',
+                  icon: 'Account_Tree'
+                },
+                { 
+                  title: 'Integraciones Robustas', 
+                  desc: 'Conectamos tu ecosistema: ERPs, CRMs, pagos y APIs de terceros.',
+                  icon: 'hub'
+                },
+                { 
+                  title: 'Soporte Continuo', 
+                  desc: 'Mantenimiento y optimización constante. Nunca te dejamos solo.',
+                  icon: 'support_agent'
+                },
+              ].map((item) => (
+                <div key={item.title} className="bg-white/40 dark:bg-slate-900/40 p-8 rounded-3xl border border-primary/10 hover:border-primary/40 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/10 group">
+                  <div className="size-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-slate-900 transition-colors">
+                    <span className="material-symbols-outlined text-3xl">
+                      {item.icon}
+                    </span>
+                  </div>
+                  <h3 className="text-xl font-extrabold mb-3">{item.title}</h3>
+                  <p className="text-sm leading-relaxed text-slate-600 dark:text-slate-400 font-medium">
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* CTA Final de Sección */}
+            <div className="text-center mt-16">
+              <a 
+                href="#ideas" 
+                className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-slate-900 text-white dark:bg-white dark:text-slate-900 font-extrabold hover:scale-105 transition-transform shadow-xl"
+              >
+                <span className="material-symbols-outlined">rocket_launch</span>
+                Solicitar Propuesta
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* FORMULARIO DE IDEAS (FRONT + BACK) */}
+        <section id="ideas" className="py-20 bg-primary/10 border-y border-primary/20">
+          <div className="max-w-4xl mx-auto px-6 md:px-12">
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">Cuéntanos tu idea</h2>
+            <p className="text-slate-700 dark:text-slate-300 mb-10 text-lg">
+              Déjanos tus datos y tu reto. Responderemos a la brevedad.
+            </p>
+
+            <form 
+              onSubmit={handleSubmit}
+              className="grid md:grid-cols-2 gap-5 bg-white dark:bg-slate-900/60 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-primary/20 shadow-xl"
+            >
+              <label className="flex flex-col gap-2">
+                <span className="text-sm font-bold opacity-80">Nombre completo</span>
+                <input 
+                  name="nombre"
+                  required
+                  value={formData.nombre}
+                  onChange={handleChange}
+                  className="rounded-xl border border-primary/25 bg-transparent px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none transition-all" 
+                  type="text" 
+                  placeholder="Tu nombre" 
+                />
+              </label>
+
+              <label className="flex flex-col gap-2">
+                <span className="text-sm font-bold opacity-80">Correo de contacto</span>
+                <input 
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="rounded-xl border border-primary/25 bg-transparent px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none transition-all" 
+                  type="email" 
+                  placeholder="nombre@empresa.com" 
+                />
+              </label>
+
+              <label className="flex flex-col gap-2 md:col-span-2">
+                <span className="text-sm font-bold opacity-80">Tipo de negocio</span>
+                <input 
+                  name="negocio"
+                  value={formData.negocio}
+                  onChange={handleChange}
+                  className="rounded-xl border border-primary/25 bg-transparent px-4 py-3 focus:ring-2 focus:ring-primary/40 outline-none transition-all" 
+                  type="text" 
+                  placeholder="Ej. cafetería, cadena retail..." 
+                />
+              </label>
+
+              <label className="flex flex-col gap-2 md:col-span-2">
+                <span className="text-sm font-bold opacity-80">Reto principal</span>
+                <textarea
+                  name="reto"
+                  required
+                  value={formData.reto}
+                  onChange={handleChange}
+                  className="rounded-xl border border-primary/25 bg-transparent px-4 py-3 min-h-36 focus:ring-2 focus:ring-primary/40 outline-none resize-none transition-all"
+                  placeholder="¿En qué te ayudamos?"
+                />
+              </label>
+
+              <div className="md:col-span-2 flex flex-col md:flex-row gap-6 md:items-center md:justify-between mt-2">
+                <div>
+                  {status === 'success' && (
+                    <p className="text-green-500 font-bold flex items-center gap-2">
+                      <span className="material-symbols-outlined">check_circle</span>
+                      ¡Mensaje enviado! Revisamos tu idea.
+                    </p>
+                  )}
+                  {status === 'error' && (
+                    <p className="text-red-500 font-bold">Error al enviar. Intenta de nuevo.</p>
+                  )}
+                  {status === 'idle' && (
+                    <p className="text-xs uppercase tracking-wider font-bold opacity-50 flex items-center gap-2">
+                      <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                      Atención inmediata
+                    </p>
+                  )}
+                </div>
+
+                <button 
+                  disabled={status === 'sending'}
+                  type="submit" 
+                  className={`px-10 py-4 rounded-xl font-extrabold transition-all shadow-lg ${
+                    status === 'sending' 
+                      ? 'bg-slate-400 cursor-wait' 
+                      : 'bg-slate-900 text-white dark:bg-primary dark:text-slate-900 hover:scale-105 active:scale-95'
+                  }`}
+                >
+                  {status === 'sending' ? 'Enviando...' : 'Enviar idea'}
+                </button>
+              </div>
+            </form>
           </div>
         </section>
       </main>
 
-      <footer className="px-6 md:px-12 py-24 border-t border-primary/10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="col-span-1 md:col-span-1">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="size-6 bg-primary rounded-full" />
-              <h2 className="text-xl font-extrabold tracking-tighter">QLatte</h2>
-            </div>
-            <p className="text-sm opacity-50 max-w-xs">Software que fluye para la empresa mexicana. Ciudad de México, MX.</p>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h6 className="text-xs font-bold uppercase tracking-widest text-primary">Producto</h6>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Punto de Venta</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Nómina Digital</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">CRM Estratégico</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Integraciones</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h6 className="text-xs font-bold uppercase tracking-widest text-primary">Compañía</h6>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Nuestra Filosofía</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Blog de Crecimiento</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Soporte 24/7</a>
-            <a className="text-sm hover:text-primary transition-colors" href="#">Prensa</a>
-          </div>
-          <div className="flex flex-col gap-4">
-            <h6 className="text-xs font-bold uppercase tracking-widest text-primary">Social</h6>
-            <div className="flex gap-4">
-              <a className="size-10 border border-primary/20 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors" href="#">
-                <span className="material-symbols-outlined text-xl">share</span>
-              </a>
-              <a className="size-10 border border-primary/20 rounded-full flex items-center justify-center hover:bg-primary/10 transition-colors" href="#">
-                <span className="material-symbols-outlined text-xl">language</span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div className="mt-24 flex flex-col md:flex-row justify-between items-center gap-8 opacity-40 text-xs font-bold uppercase tracking-tighter">
-          <p>© 2026 QLATTE SOFTWARE S.A.S</p>
-          <div className="flex gap-8">
-            <a href="#">Privacidad</a>
-            <a href="#">Términos</a>
-            <a href="#">Seguridad</a>
-          </div>
+      <footer id="contacto" className="max-w-7xl mx-auto px-6 md:px-12 py-14 border-t border-primary/10 flex flex-col md:flex-row gap-6 md:items-center md:justify-between">
+        <p className="text-sm opacity-70">© 2026 QLatte Software. Toluca, México.</p>
+        <div className="flex items-center gap-6 text-sm font-semibold">
+          <a href="https://api.whatsapp.com/send/?phone=7221069621" className="text-primary hover:underline">Soporte WhatsApp</a>
         </div>
       </footer>
     </div>
