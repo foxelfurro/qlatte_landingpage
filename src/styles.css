@@ -1,100 +1,132 @@
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=Instrument+Serif:italic@0;1&family=Manrope:wght@400;700;800&display=swap');
+
+:root {
+  /* Tu color QLatte centralizado */
+  --primary: #c6c639;
+  --primary-rgb: 198, 198, 57;
+  --primary-light: #d7d77d;
+}
+
+/* --- Base & Typography --- */
 body {
   margin: 0;
   font-family: 'Manrope', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
+h1, h2, h3, .font-display {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-serif {
+  font-family: 'Instrument Serif', serif;
+}
+
+.tracking-tighter {
+  letter-spacing: -0.05em;
+}
+
+/* --- Animations --- */
+@keyframes drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(18px, -20px, 0); }
+}
+
+@keyframes spinRing {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(0.95); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+@keyframes revealUp {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.reveal-up {
+  opacity: 0; /* Estado inicial para la animación */
+  animation: revealUp 0.8s cubic-bezier(0.2, 0, 0.2, 1) forwards;
+}
+
+/* --- Decoraciones de Fondo (Orbs) --- */
 .orb {
   position: absolute;
   border-radius: 9999px;
-  filter: blur(70px);
-  opacity: 0.35;
+  filter: blur(80px);
+  opacity: 0.3;
   pointer-events: none;
+  z-index: 0;
 }
 
 .orb-one {
-  width: 16rem;
-  height: 16rem;
-  background: #c6c639;
-  top: -4rem;
-  left: -2rem;
-  animation: drift 9s ease-in-out infinite;
+  width: 20rem;
+  height: 20rem;
+  background: var(--primary);
+  top: -5rem;
+  left: -5rem;
+  animation: drift 10s ease-in-out infinite;
 }
 
 .orb-two {
-  width: 18rem;
-  height: 18rem;
-  background: #d7d77d;
-  bottom: -6rem;
-  right: -3rem;
-  animation: drift 11s ease-in-out infinite reverse;
+  width: 25rem;
+  height: 25rem;
+  background: var(--primary-light);
+  bottom: -8rem;
+  right: -5rem;
+  animation: drift 12s ease-in-out infinite reverse;
 }
 
+/* --- Hero Showcase (El Widget Tecnológico) --- */
 .hero-showcase {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(198, 198, 57, 0.35);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 225, 0.92));
-  box-shadow: 0 22px 55px rgba(15, 23, 42, 0.16);
+  border: 1px solid rgba(var(--primary-rgb), 0.2);
+  /* Glassmorphism mejorado */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.4));
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 30px 60px -12px rgba(15, 23, 42, 0.15);
+  transition: all 0.4s ease;
+}
+
+.dark .hero-showcase {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.7));
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hero-ring {
   position: absolute;
-  width: 20rem;
-  height: 20rem;
+  width: 22rem;
+  height: 22rem;
   border-radius: 9999px;
-  border: 28px solid rgba(198, 198, 57, 0.16);
-  top: -7rem;
-  right: -7rem;
-  animation: spinRing 14s linear infinite;
+  border: 32px solid rgba(var(--primary-rgb), 0.08);
+  top: -8rem;
+  right: -8rem;
+  animation: spinRing 20s linear infinite;
+  pointer-events: none;
+}
+
+/* --- Micro-Interacciones --- */
+.group:hover .hero-ring {
+  border-color: rgba(var(--primary-rgb), 0.15);
+  transition: border-color 0.5s ease;
 }
 
 .pulse-dot {
-  animation: pulseDot 1.8s ease-in-out infinite;
+  animation: pulseDot 2s ease-in-out infinite;
+  background-color: #22c55e; /* Green-500 */
 }
 
-.reveal-up {
-  opacity: 0;
-  animation: revealUp 700ms ease forwards;
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(18px, -20px, 0);
-  }
-}
-
-@keyframes spinRing {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes pulseDot {
-  0%,
-  100% {
-    transform: scale(0.95);
-    opacity: 0.7;
-  }
-  50% {
-    transform: scale(1.15);
-    opacity: 1;
-  }
-}
-
-@keyframes revealUp {
-  from {
-    transform: translateY(16px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+/* Utility para hover de tarjetas */
+.card-hover-gradient:hover {
+  background-image: linear-gradient(
+    to bottom right, 
+    rgba(var(--primary-rgb), 0.08), 
+    transparent
+  );
 }
