@@ -27,3 +27,5 @@ Abre `http://localhost:5173`.
 
 - Tailwind se carga por CDN en `index.html`.
 - La landing principal está en `src/App.jsx`.
+
+
